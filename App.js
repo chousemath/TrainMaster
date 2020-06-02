@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     ImageBackground,
     TouchableOpacity,
@@ -16,6 +16,14 @@ import {
     _flexCenter,
 } from './styles/Common';
 import TouchableImage from './components/TouchableImage';
+import Modal from 'react-native-modal';
+const maps = [
+    require('./images/map-01.jpg'),
+    require('./images/map-02.jpg'),
+    require('./images/map-03.jpg'),
+    require('./images/map-04.jpg'),
+];
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -30,22 +38,23 @@ const dimCalculator = { height: (_dimPaper * 5) / 3, width: _dimPaper };
 const dimLedger = { height: _dimPaper * 2, width: _dimPaper };
 const _dimMap = 0.35 * windowWidth;
 const dimMap = { height: (_dimMap * 2) / 3, width: _dimMap };
-const onPressTimetable = () => {
-    alert('timetable pressed');
-};
-const onPressNotes = () => {
-    alert('notes pressed');
-};
-const onPressMap = () => {
-    alert('map pressed');
-};
-const onPressCalculator = () => {
-    alert('calculator pressed');
-};
-const onPressLedger = () => {
-    alert('ledger pressed');
-};
 export default function App() {
+    const [visibleMap, setVisibleMap] = useState(false);
+    const onPressTimetable = () => {
+        alert('timetable pressed');
+    };
+    const onPressNotes = () => {
+        alert('notes pressed');
+    };
+    const onPressMap = () => {
+        setVisibleMap(true);
+    };
+    const onPressCalculator = () => {
+        alert('calculator pressed');
+    };
+    const onPressLedger = () => {
+        alert('ledger pressed');
+    };
     return (
         <View style={styles.container}>
             <ScrollView bounces={false} style={styles.containerMain}>
@@ -53,20 +62,59 @@ export default function App() {
                 <View style={styles.containerTerminal}></View>
                 <ImageBackground source={imWood} style={styles.containerDesk}>
                     <View style={{ ..._flexUpDown }}>
-                        <TouchableImage source={imPaper} style={dimPaper} onPress={onPressTimetable}/>
-                        <TouchableImage source={imPaper} style={dimPaper} onPress={onPressNotes}/>
-                        <TouchableImage source={imCalculator} style={dimCalculator} onPress={onPressCalculator}/>
+                        <TouchableImage
+                            source={imPaper}
+                            style={dimPaper}
+                            onPress={onPressTimetable}
+                        />
+                        <TouchableImage
+                            source={imPaper}
+                            style={dimPaper}
+                            onPress={onPressNotes}
+                        />
+                        <TouchableImage
+                            source={imCalculator}
+                            style={dimCalculator}
+                            onPress={onPressCalculator}
+                        />
                     </View>
                     <View
                         style={{
                             ..._flexStart,
                             paddingLeft: 8,
                         }}>
-                        <TouchableImage source={imMap} style={dimMap} onPress={onPressMap}/>
-                        <TouchableImage source={imLedger} style={dimLedger} onPress={onPressLedger}/>
+                        <TouchableImage
+                            source={imMap}
+                            style={dimMap}
+                            onPress={onPressMap}
+                        />
+                        <TouchableImage
+                            source={imLedger}
+                            style={dimLedger}
+                            onPress={onPressLedger}
+                        />
                     </View>
                 </ImageBackground>
             </ScrollView>
+            <Modal
+                style={styles.modalMap}
+                backdropColor='#ffffff'
+                isVisible={visibleMap}>
+                <ScrollView
+                    bounces={false}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    style={styles.mapsContainer}>
+                    {maps.map((src, i) => (
+                        <TouchableImage
+                            key={`map-${i}`}
+                            source={src}
+                            style={{ width: windowWidth, height: windowHeight }}
+                            onPress={() => setVisibleMap(false)}
+                        />
+                    ))}
+                </ScrollView>
+            </Modal>
         </View>
     );
 }
@@ -90,13 +138,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: windowWidth,
         height: windowHeight * 0.2,
-        backgroundColor: 'darkgreen',
+        backgroundColor: '#BEC6C4',
     },
     containerTerminal: {
         display: 'flex',
         width: windowWidth,
         height: windowHeight * 0.7,
-        backgroundColor: 'aqua',
+        backgroundColor: '#D9D9D6',
     },
     containerDesk: {
         ..._flexLeftRight,
@@ -114,5 +162,15 @@ const styles = StyleSheet.create({
     },
     touchableMap: {
         marginBottom: 8,
+    },
+    modalMap: {
+        marginTop: 0,
+        marginBottom: 0,
+        marginLeft: 0,
+        marginRight: 0,
+    },
+    mapsContainer: {
+        width: '100%',
+        height: '100%',
     },
 });
