@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     ImageBackground,
@@ -9,6 +9,7 @@ import {
     Text,
     View,
     Image,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import {
     _flexEnd,
@@ -28,60 +29,92 @@ const windowHeight = Dimensions.get('window').height;
 
 const Stack = createStackNavigator();
 
-function LineCard({ line }) {
+function LineCard({ line, navigation }) {
     return (
-        <View
-            key={`card-${line.value}`}
-            style={{ ...styles.lineCard, ..._flexLeftRight, backgroundColor: line.value }}>
-            <View style={{
-                ..._flexUpDown,
-                flexGrow: 1,
+        <TouchableWithoutFeedback
+            onPress={() => {
+                navigation.navigate('Quiz', line);
             }}>
-                <View style={{
-                    ..._flexStart,
-                    flexGrow: 1,
-                    paddingTop: 32,
-                    paddingLeft: 32,
+            <View
+                key={`card-${line.value}`}
+                style={{
+                    ...styles.lineCard,
+                    ..._flexLeftRight,
+                    backgroundColor: line.value,
                 }}>
-                    <Text
-                        numberOfLines={2}
-                        style={styles.lineCardTitle}>
-                        {line.viewValue}
-                    </Text>
-                    <Text
-                        numberOfLines={1}
-                        style={styles.lineCardUpdatedAt}>
-                        최근 퀴즈: 2020.03.15
-                    </Text>
-                    <Text
-                        numberOfLines={1}
-                        style={styles.lineCardUpdatedAt}>
-                        최고 점수: {Math.floor(Math.random() * 55).toString()}
-                    </Text>
+                <View
+                    style={{
+                        ..._flexUpDown,
+                        flexGrow: 1,
+                    }}>
+                    <View
+                        style={{
+                            ..._flexStart,
+                            flexGrow: 1,
+                            paddingTop: 32,
+                            paddingLeft: 32,
+                        }}>
+                        <Text numberOfLines={2} style={styles.lineCardTitle}>
+                            {line.viewValue}
+                        </Text>
+                        <Text
+                            numberOfLines={1}
+                            style={styles.lineCardUpdatedAt}>
+                            최근 퀴즈: 2020.03.15
+                        </Text>
+                        <Text
+                            numberOfLines={1}
+                            style={styles.lineCardUpdatedAt}>
+                            최고 점수:{' '}
+                            {Math.floor(Math.random() * 55).toString()}
+                        </Text>
+                    </View>
+                </View>
+                <View
+                    style={{
+                        ..._flexEnd,
+                        width: 150,
+                        height: '100%',
+                    }}>
+                    <Image source={line.character} style={styles.mascot} />
                 </View>
             </View>
-            <View style={{
-                ..._flexEnd,
-                width: 150,
-                height: '100%',
+        </TouchableWithoutFeedback>
+    );
+}
+
+function QuizScreen({ route, navigation }) {
+    const { value, viewValue, character } = route.params;
+    useEffect(() => {
+        navigation.setOptions({
+            title: `${viewValue}: Let's go!`,
+            headerStyle: { backgroundColor: value },
+        });
+    }, []);
+    return (
+        <View
+            style={{
+                ..._flexCenter,
+                flex: 1,
             }}>
-                <Image
-                    source={line.character}
-                    style={styles.mascot}
-                />
-            </View>
+            <Text style={{ ...styles.inProgress, color: value }}>
+                이 페이지는 개발 중입니다.
+            </Text>
         </View>
     );
 }
-function HomeScreen() {
+
+function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <SafeAreaView style={_flexOne}>
                 <ScrollView bounces={false} style={styles.containerMain}>
                     {colorList.map((line) => (
-                        <LineCard 
-                        key={`line-card-${line.value}`}
-                        line={line} />
+                        <LineCard
+                            navigation={navigation}
+                            key={`line-card-${line.value}`}
+                            line={line}
+                        />
                     ))}
                 </ScrollView>
             </SafeAreaView>
@@ -107,6 +140,21 @@ export default function App() {
                     name='Home'
                     component={HomeScreen}
                 />
+                <Stack.Screen
+                    options={{
+                        title: '지하철 역들을 연결하세요!',
+                        headerStyle: {
+                            backgroundColor: '#000000',
+                            shadowColor: 'transparent',
+                            shadowRadius: 0,
+                            shadowOffset: { height: 0 },
+                        },
+                        headerTintColor: '#ffffff',
+                        headerBackTitle: '뒤로',
+                    }}
+                    name='Quiz'
+                    component={QuizScreen}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
@@ -129,5 +177,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#ffffff',
     },
-    mascot: { width: 150, height: 150, },
+    mascot: { width: 150, height: 150 },
+    inProgress: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
 });
