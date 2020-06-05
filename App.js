@@ -26,6 +26,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const cardHeight = 210;
 
 const Stack = createStackNavigator();
 
@@ -111,28 +112,28 @@ function HomeScreen({ navigation }) {
         });
     const handleScrollLines = ({ nativeEvent }) => {
         const y = nativeEvent.contentOffset.y;
-        if (y < 180 * 1) setHeaderBG('rgba(57,60,147,1)');
-        else if (y < 180 * 2) setHeaderBG('rgba(88,174,88,1)');
-        else if (y < 180 * 3) setHeaderBG('rgba(225,115,51,1)');
-        else if (y < 180 * 4) setHeaderBG('rgba(76,174,231,1)');
-        else if (y < 180 * 5) setHeaderBG('rgba(148,73,160,1)');
-        else if (y < 180 * 6) setHeaderBG('rgba(190,130,55,1)');
-        else if (y < 180 * 7) setHeaderBG('rgba(97,116,62,1)');
-        else if (y < 180 * 8) setHeaderBG('rgba(216,75,115,1)');
-        else if (y < 180 * 9) setHeaderBG('rgba(198,168,121,1)');
-        else if (y < 180 * 10) setHeaderBG('rgba(143,200,72,1)');
-        else if (y < 180 * 11) setHeaderBG('rgba(166,128,41,1)');
-        else if (y < 180 * 12) setHeaderBG('rgba(134,201,162,1)');
-        else if (y < 180 * 13) setHeaderBG('rgba(241,177,62,1)');
-        else if (y < 180 * 14) setHeaderBG('rgba(63,142,166,1)');
-        else if (y < 180 * 15) setHeaderBG('rgba(231,184,65,1)');
-        else if (y < 180 * 16) setHeaderBG('rgba(43,84,160,1)');
+        if (y < cardHeight * 1) setHeaderBG('rgba(57,60,147,1)');
+        else if (y < cardHeight * 2) setHeaderBG('rgba(88,174,88,1)');
+        else if (y < cardHeight * 3) setHeaderBG('rgba(225,115,51,1)');
+        else if (y < cardHeight * 4) setHeaderBG('rgba(76,174,231,1)');
+        else if (y < cardHeight * 5) setHeaderBG('rgba(148,73,160,1)');
+        else if (y < cardHeight * 6) setHeaderBG('rgba(190,130,55,1)');
+        else if (y < cardHeight * 7) setHeaderBG('rgba(97,116,62,1)');
+        else if (y < cardHeight * 8) setHeaderBG('rgba(216,75,115,1)');
+        else if (y < cardHeight * 9) setHeaderBG('rgba(198,168,121,1)');
+        else if (y < cardHeight * 10) setHeaderBG('rgba(143,200,72,1)');
+        else if (y < cardHeight * 11) setHeaderBG('rgba(166,128,41,1)');
+        else if (y < cardHeight * 12) setHeaderBG('rgba(134,201,162,1)');
+        else if (y < cardHeight * 13) setHeaderBG('rgba(241,177,62,1)');
+        else if (y < cardHeight * 14) setHeaderBG('rgba(63,142,166,1)');
+        else if (y < cardHeight * 15) setHeaderBG('rgba(231,184,65,1)');
+        else if (y < cardHeight * 16) setHeaderBG('rgba(43,84,160,1)');
     };
     return (
         <View style={styles.container}>
             <SafeAreaView style={_flexOne}>
                 <ScrollView
-                    snapToInterval={180}
+                    snapToInterval={cardHeight}
                     snapToAlignment='start'
                     decelerationRate={0}
                     bounces={false}
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     containerMain: { ..._flexOne },
     lineCard: {
         width: windowWidth,
-        height: 180,
+        height: cardHeight,
     },
     lineCardTitle: {
         fontSize: 32,
