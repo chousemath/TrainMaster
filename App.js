@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+    SafeAreaView,
     ImageBackground,
     TouchableOpacity,
     Dimensions,
@@ -10,6 +11,8 @@ import {
     Image,
 } from 'react-native';
 import {
+    _flexEnd,
+    _flexOne,
     _flexStart,
     _flexLeftRight,
     _flexUpDown,
@@ -17,160 +20,68 @@ import {
 } from './styles/Common';
 import TouchableImage from './components/TouchableImage';
 import Modal from 'react-native-modal';
-const maps = [
-    require('./images/map-01.jpg'),
-    require('./images/map-02.jpg'),
-    require('./images/map-03.jpg'),
-    require('./images/map-04.jpg'),
-];
-
+import { colors, colorList } from './libraries/Colors';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const mascot = require('./images/colin.png');
 
-const imLedger = require('./images/ledger.jpg');
-const imWood = require('./images/wood.jpg');
-const imPaper = require('./images/paper.jpg');
-const imMap = require('./images/map.jpg');
-const imCalculator = require('./images/calculator.jpg');
-const _dimPaper = 0.2 * windowWidth;
-const dimPaper = { height: (_dimPaper * 4) / 3, width: _dimPaper };
-const dimCalculator = { height: (_dimPaper * 5) / 3, width: _dimPaper };
-const dimLedger = { height: _dimPaper * 2, width: _dimPaper };
-const _dimMap = 0.35 * windowWidth;
-const dimMap = { height: (_dimMap * 2) / 3, width: _dimMap };
+function LineCard({ line }) {
+    return (
+        <View
+            key={`card-${line.value}`}
+            style={{ ...styles.lineCard, ..._flexLeftRight, backgroundColor: line.value }}>
+            <View style={{
+                ..._flexUpDown,
+                flexGrow: 1,
+            }}>
+                <View style={{
+                    ..._flexStart,
+                    flexGrow: 1,
+                    paddingTop: 32,
+                    paddingLeft: 32,
+                }}>
+                    <Text style={styles.lineCardTitle}>{line.viewValue}</Text>
+                </View>
+            </View>
+            <View style={{
+                ..._flexEnd,
+                width: 150,
+                height: '100%',
+            }}>
+                <Image
+                    source={mascot}
+                    style={styles.mascot}
+                />
+            </View>
+        </View>
+    );
+}
 export default function App() {
-    const [visibleMap, setVisibleMap] = useState(false);
-    const onPressTimetable = () => {
-        alert('timetable pressed');
-    };
-    const onPressNotes = () => {
-        alert('notes pressed');
-    };
-    const onPressMap = () => {
-        setVisibleMap(true);
-    };
-    const onPressCalculator = () => {
-        alert('calculator pressed');
-    };
-    const onPressLedger = () => {
-        alert('ledger pressed');
-    };
     return (
         <View style={styles.container}>
-            <ScrollView bounces={false} style={styles.containerMain}>
-                <View style={styles.containerClock}></View>
-                <View style={styles.containerTerminal}></View>
-                <ImageBackground source={imWood} style={styles.containerDesk}>
-                    <View style={{ ..._flexUpDown }}>
-                        <TouchableImage
-                            source={imPaper}
-                            style={dimPaper}
-                            onPress={onPressTimetable}
-                        />
-                        <TouchableImage
-                            source={imPaper}
-                            style={dimPaper}
-                            onPress={onPressNotes}
-                        />
-                        <TouchableImage
-                            source={imCalculator}
-                            style={dimCalculator}
-                            onPress={onPressCalculator}
-                        />
-                    </View>
-                    <View
-                        style={{
-                            ..._flexStart,
-                            paddingLeft: 8,
-                        }}>
-                        <TouchableImage
-                            source={imMap}
-                            style={dimMap}
-                            onPress={onPressMap}
-                        />
-                        <TouchableImage
-                            source={imLedger}
-                            style={dimLedger}
-                            onPress={onPressLedger}
-                        />
-                    </View>
-                </ImageBackground>
-            </ScrollView>
-            <Modal
-                style={styles.modalMap}
-                backdropColor='#ffffff'
-                isVisible={visibleMap}>
-                <ScrollView
-                    bounces={false}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    style={styles.mapsContainer}>
-                    {maps.map((src, i) => (
-                        <TouchableImage
-                            key={`map-${i}`}
-                            source={src}
-                            style={{ width: windowWidth, height: windowHeight }}
-                            onPress={() => setVisibleMap(false)}
-                        />
+            <SafeAreaView style={_flexOne}>
+                <ScrollView bounces={false} style={styles.containerMain}>
+                    {colorList.map((line) => (
+                        <LineCard 
+                        key={`line-card-${line.value}`}
+                        line={line} />
                     ))}
                 </ScrollView>
-            </Modal>
+            </SafeAreaView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flex: 1,
-        backgroundColor: 'gray',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    containerMain: {
+    container: { ..._flexOne, alignItems: 'center', justifyContent: 'center' },
+    containerMain: { ..._flexOne },
+    lineCard: {
         width: windowWidth,
-        height: windowHeight,
-        display: 'flex',
-        flex: 1,
-        backgroundColor: 'pink',
+        height: 180,
     },
-    containerClock: {
-        display: 'flex',
-        width: windowWidth,
-        height: windowHeight * 0.2,
-        backgroundColor: '#BEC6C4',
+    lineCardTitle: {
+        fontSize: 32,
+        color: '#ffffff',
     },
-    containerTerminal: {
-        display: 'flex',
-        width: windowWidth,
-        height: windowHeight * 0.7,
-        backgroundColor: '#D9D9D6',
-    },
-    containerDesk: {
-        ..._flexLeftRight,
-        width: windowWidth,
-        paddingTop: 24,
-        paddingLeft: 24,
-        paddingRight: 24,
-        paddingBottom: 40,
-    },
-    touchableTimetable: {
-        marginBottom: 8,
-    },
-    touchableNotes: {
-        marginBottom: 8,
-    },
-    touchableMap: {
-        marginBottom: 8,
-    },
-    modalMap: {
-        marginTop: 0,
-        marginBottom: 0,
-        marginLeft: 0,
-        marginRight: 0,
-    },
-    mapsContainer: {
-        width: '100%',
-        height: '100%',
-    },
+    mascot: { width: 150, height: 150, },
 });

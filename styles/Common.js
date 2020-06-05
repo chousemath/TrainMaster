@@ -3,6 +3,11 @@ exports._flexCenter = {
     justifyContent: 'center',
     alignItems: 'center',
 };
+exports._flexEnd = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+};
 exports._flexStart = {
     display: 'flex',
     justifyContent: 'flex-start',
